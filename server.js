@@ -8,7 +8,14 @@ app.use(express.json()) // Middleware to parse JSON bodies
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: false}))
 
-const OpenAI = require('openai')
+const ElevenLabs = require('elevenlabs-node') // Create Elevenlabs instance
+const voice = new ElevenLabs(
+  {
+    apiKey: process.env.ELEVENLABS_API_KEY,
+  }
+)
+
+const OpenAI = require('openai') // Create OPENAI instance
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 })
@@ -28,13 +35,23 @@ app.post('/ask', async (req, res) => {
           {
             role: "user",
             content: "What is your favorite memory as a child?"
+          },
+          {
+            role: "user",
+            content: question
           }
         ],
         max_tokens: 150,
       });
   
       console.log(response.choices[0].message)
-
+      voice.textToSpeech(
+        {
+          fileName: "audio.mp3",
+          textInput: response.choices[0].message.content
+        }).then((res) => {
+          console.log(res)
+        })
     } catch (error) {
       console.error("Error calling OpenAI API:", error);
       res.status(500).json({ message: "Failed to fetch response" });
