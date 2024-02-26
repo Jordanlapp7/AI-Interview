@@ -37,7 +37,7 @@ app.post('/ask', async (req, res) => {
       });
   
       console.log(response.choices[0].message)
-      voice.textToSpeech(
+      await voice.textToSpeech(
         {
           fileName: 'public/audio.mp3',
           textInput: response.choices[0].message.content
