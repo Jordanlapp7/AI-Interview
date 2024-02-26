@@ -22,22 +22,14 @@ const openai = new OpenAI({
 
 // Route to handle question submission
 app.post('/ask', async (req, res) => {
-  console.log("POST Received")
+  console.log('POST Received')
     try {
       const question = req.body.question;
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-3.5-turbo',
         messages: [
           {
-            role: "system",
-            content: "You are playing a game in which you try to fit in with user's prompts. There may be anywhere between 1 to 8 user responses. The first prompt is the question asked to all players, the subsequent prompts are the players' responses. Analyze the answers from each player and create a single answer to the prompt that is similar to the other answers in terms of punctuation, length, tone, and word choice, with a strong emphasis on imitating sentence structure. For example, the response does not need to be grammatically correct, and you may create spelling mistakes if the user did.",
-          },
-          {
-            role: "user",
-            content: "What is your favorite memory as a child?"
-          },
-          {
-            role: "user",
+            role: 'user',
             content: question
           }
         ],
@@ -47,14 +39,15 @@ app.post('/ask', async (req, res) => {
       console.log(response.choices[0].message)
       voice.textToSpeech(
         {
-          fileName: "audio.mp3",
+          fileName: 'public/audio.mp3',
           textInput: response.choices[0].message.content
-        }).then((res) => {
-          console.log(res)
+        }).then(() => {
+          console.log('Audio file created')
         })
+        res.status(201).json({ audioPath: '/audio.mp3' })
     } catch (error) {
-      console.error("Error calling OpenAI API:", error);
-      res.status(500).json({ message: "Failed to fetch response" });
+      console.error('Error calling OpenAI API:', error);
+      res.status(500).json({ message: 'Failed to fetch response' });
     }
   });
 

@@ -1,15 +1,25 @@
 // JavaScript to handle the form submission
 document.getElementById('questionForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    console.log("here")
-    const question = document.getElementById('questionInput').value;
-    const response = await fetch('/ask', {
+    e.preventDefault()
+    console.log("HERE")
+    const question = document.getElementById('questionInput').value
+    fetch('/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question }),
-    });
-    console.log("Here")
-    const data = await response.json();
-    console.log("HERE")
-    document.getElementById('answer').textContent = data.answer;
-  });
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(data.audioPath) {
+        console.log("VALID AUDIO PATH")
+        const audioUrl = data.audioPath
+        const audio = new Audio(audioUrl)
+        audio.play()
+          .then(() => console.log('Audio is playing...'))
+          .catch(error => console.error('Error playing audio:', error))
+      } else {
+        console.log('No audio path received')
+      }
+    })
+    .catch(error => console.error('Fetch error:', error))
+})
