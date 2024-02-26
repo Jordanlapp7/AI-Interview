@@ -1,2 +1,2 @@
 # BotBluff
-A personal project that incorporates artificial intelligence to create a game in which the goal is to single out the AI from user prompts.
+A personal project that incorporates OpenAI and ElevenLabs APIs to generate responses to prompts using my voice.
