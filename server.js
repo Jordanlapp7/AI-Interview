@@ -38,7 +38,7 @@ app.post('/ask', async (req, res) => {
             content: question
           }
         ],
-        max_tokens: 150,
+        max_tokens: 300,
       });
   
       console.log(response.choices[0].message)
