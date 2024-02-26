@@ -12,6 +12,7 @@ const ElevenLabs = require('elevenlabs-node') // Create Elevenlabs instance
 const voice = new ElevenLabs(
   {
     apiKey: process.env.ELEVENLABS_API_KEY,
+    voiceId: "23MqtcSrFEemBPnyN4y8"
   }
 )
 
